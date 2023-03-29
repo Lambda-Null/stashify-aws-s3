@@ -6,15 +6,13 @@ module Stashify
   class File
     module AWS
       class S3 < Stashify::File
-        def initialize(s3_client, bucket_name, path)
-          @s3_client = s3_client
-          @bucket_name = bucket_name
-          @path = path
-          super(name: ::File.basename(path))
+        def initialize(bucket:, path:)
+          @bucket = bucket
+          super(path: path)
         end
 
         def contents
-          @s3_client.get_object(bucket: @bucket_name, key: @path).body.read
+          @bucket.object(path).get.body.read
         end
       end
     end

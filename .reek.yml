@@ -6,3 +6,8 @@ detectors:
     accept:
       - Stashify::AWS::S3
       - Stashify::File::AWS::S3
+      - Stashify::Directory::AWS::S3
+
+  UncommunicativeVariableName:
+    accept:
+      - s3

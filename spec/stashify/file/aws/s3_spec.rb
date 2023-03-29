@@ -4,9 +4,8 @@ require "stashify/file/aws/s3"
 
 RSpec.describe Stashify::File::AWS::S3, aws: true do
   around(:each) do |s|
-    SpecUtils.temp_bucket do |s3_client, bucket_name|
-      @s3_client = s3_client
-      @bucket_name = bucket_name
+    SpecUtils.temp_bucket do |bucket|
+      @bucket = bucket
       s.run
     end
   end
@@ -26,13 +25,9 @@ RSpec.describe Stashify::File::AWS::S3, aws: true do
 
   it "takes an s3 client, bucket name and path for the constructor" do
     properties.check(property_count) do |path, contents|
-      @s3_client.put_object(
-        bucket: @bucket_name,
-        key: path,
-        body: contents,
-      )
+      @bucket.object(path).put(body: contents)
 
-      file = Stashify::File::AWS::S3.new(@s3_client, @bucket_name, path)
+      file = Stashify::File::AWS::S3.new(bucket: @bucket, path: path)
       expect(file.name).to eq(File.basename(path))
       expect(file.contents).to eq(contents)
     end

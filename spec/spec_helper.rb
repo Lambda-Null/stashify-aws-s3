@@ -20,23 +20,17 @@ end
 
 module SpecUtils
   def self.temp_bucket
-    s3_client = Aws::S3::Client.new
-    bucket_name = SecureRandom.uuid
-    s3_client.create_bucket(bucket: bucket_name)
-    yield(s3_client, bucket_name)
+    bucket = create_bucket
+    yield(bucket)
   ensure
-    delete_all_objects(s3_client, bucket_name)
-    s3_client.delete_bucket(bucket: bucket_name) if bucket_name
+    bucket&.objects&.batch_delete!
+    bucket&.delete
   end
 
-  def self.delete_all_objects(s3_client, bucket_name)
-    s3_client.delete_objects(
-      bucket: bucket_name,
-      delete: {
-        objects: s3_client.list_objects_v2(bucket: bucket_name).contents.map do |object|
-          { key: object.key }
-        end
-      },
-    )
+  def self.create_bucket
+    s3 = Aws::S3::Resource.new
+    bucket_name = SecureRandom.uuid
+    s3.create_bucket(bucket: bucket_name)
+    s3.bucket(bucket_name)
   end
 end
