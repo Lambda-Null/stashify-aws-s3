@@ -3,7 +3,7 @@ PATH
   specs:
     stashify-aws-s3 (0.1.0)
       aws-sdk-s3 (~> 1.119.2)
-      stashify (~> 2.1.0)
+      stashify (~> 2.1.1)
 
 GEM
   remote: https://rubygems.org/
@@ -107,7 +107,7 @@ GEM
       parser (>= 3.2.1.0)
     ruby-progressbar (1.13.0)
     shellany (0.0.1)
-    stashify (2.1.0)
+    stashify (2.1.1)
     thor (1.2.1)
     unicode-display_width (2.4.2)
 

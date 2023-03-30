@@ -10,7 +10,7 @@ RSpec.describe Stashify::Directory::AWS::S3, aws: true do
     end
   end
 
-  let(:property_count) { 1 }
+  let(:property_count) { 10 }
 
   let(:properties) do
     property_of do

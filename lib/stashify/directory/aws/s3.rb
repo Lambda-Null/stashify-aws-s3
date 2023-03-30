@@ -16,17 +16,13 @@ module Stashify
 
         def files
           @bucket.objects.map do |object|
-            file(::File.basename(object.key))
-          end
+            key = object.key
+            file(::File.basename(key)) if key =~ %r{^#{Regexp.escape(path)}/([^/]*)(/.*)?$}
+          end.compact
         end
 
-        def delete(name)
-          if directory?(name)
-            subdir = directory(name)
-            subdir.files.each { |file| subdir.delete(file.name) }
-          else
-            @bucket.object(path_of(name)).delete
-          end
+        def delete_file(name)
+          @bucket.object(path_of(name)).delete
         end
 
         def ==(other)
