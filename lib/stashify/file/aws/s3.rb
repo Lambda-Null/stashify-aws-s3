@@ -14,6 +14,14 @@ module Stashify
         def contents
           @bucket.object(path).get.body.read
         end
+
+        def write(contents)
+          @bucket.object(path).put(body: contents)
+        end
+
+        def delete
+          @bucket.object(path).delete
+        end
       end
     end
   end

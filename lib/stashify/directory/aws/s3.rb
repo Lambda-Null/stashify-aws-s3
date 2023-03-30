@@ -21,19 +21,11 @@ module Stashify
           end.compact
         end
 
-        def delete_file(name)
-          @bucket.object(path_of(name)).delete
-        end
-
         def ==(other)
           self.class == other.class && @bucket == other.bucket && path == other.path
         end
 
         private
-
-        def write_file(file)
-          @bucket.object(path_of(file.name)).put(body: file.contents)
-        end
 
         def directory?(name)
           @bucket.objects(prefix: path_of(name, "")).count.positive?
