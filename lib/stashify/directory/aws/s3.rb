@@ -14,18 +14,19 @@ module Stashify
           super(path: path)
         end
 
+        def parent
+          Stashify::Directory::AWS::S3.new(
+            bucket: @bucket,
+            path: ::File.dirname(path),
+          )
+        end
+
         def files
           @bucket.objects.map do |object|
             key = object.key
             file(::File.basename(key)) if key =~ %r{^#{Regexp.escape(path)}/([^/]*)(/.*)?$}
           end.compact
         end
-
-        def ==(other)
-          self.class == other.class && @bucket == other.bucket && path == other.path
-        end
-
-        private
 
         def directory?(name)
           @bucket.objects(prefix: path_of(name, "")).count.positive?
@@ -35,12 +36,16 @@ module Stashify
           Stashify::Directory::AWS::S3.new(bucket: @bucket, path: path_of(name))
         end
 
-        def file?(name)
+        def exists?(name)
           @bucket.object(::File.join(path, name)).exists?
         end
 
         def file(name)
           Stashify::File::AWS::S3.new(bucket: @bucket, path: ::File.join(path, name))
+        end
+
+        def ==(other)
+          self.class == other.class && @bucket == other.bucket && path == other.path
         end
       end
     end

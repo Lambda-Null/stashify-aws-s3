@@ -7,8 +7,11 @@
 /spec/reports/
 /tmp/
 
+# rspec failure tracking
+.rspec_status
+
 # debugging
 .byebug_history
 
-# rspec failure tracking
-.rspec_status
+# publishing gem
+*.gem

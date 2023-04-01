@@ -22,6 +22,10 @@ module Stashify
         def delete
           @bucket.object(path).delete
         end
+
+        def exists?
+          @bucket.object(path).exists?
+        end
       end
     end
   end

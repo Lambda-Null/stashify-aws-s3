@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require "stashify/contract/file_contract"
+
 require "stashify/file/aws/s3"
 
 RSpec.describe Stashify::File::AWS::S3, aws: true do
@@ -10,26 +12,18 @@ RSpec.describe Stashify::File::AWS::S3, aws: true do
     end
   end
 
-  let(:property_count) { 10 }
+  include_context "file setup", 10
 
-  let(:properties) do
-    property_of do
-      path = array(5) do
-        dir = string
-        guard dir !~ %r{/}
-        dir
-      end
-      [File.join(path), string]
-    end
+  before(:each) do
+    @bucket.object(path).put(body: contents)
   end
 
-  it "takes an s3 client, bucket name and path for the constructor" do
-    properties.check(property_count) do |path, contents|
-      @bucket.object(path).put(body: contents)
-
-      file = Stashify::File::AWS::S3.new(bucket: @bucket, path: path)
-      expect(file.name).to eq(File.basename(path))
-      expect(file.contents).to eq(contents)
-    end
+  subject(:file) do
+    Stashify::File::AWS::S3.new(
+      bucket: @bucket,
+      path: path,
+    )
   end
+
+  it_behaves_like "a file"
 end
