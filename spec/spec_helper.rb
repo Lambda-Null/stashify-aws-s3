@@ -4,8 +4,6 @@ require "aws-sdk-s3"
 require "rantly/rspec_extensions"
 require "securerandom"
 
-require "stashify/aws/s3"
-
 RSpec.configure do |config|
   # Enable flags like --only-failures and --next-failure
   config.example_status_persistence_file_path = ".rspec_status"
@@ -18,6 +16,8 @@ RSpec.configure do |config|
   end
 end
 
+# Provides facilities, such as management of temporary buckets, which
+# are useful for running automated tests.
 module SpecUtils
   def self.temp_bucket
     bucket = create_bucket

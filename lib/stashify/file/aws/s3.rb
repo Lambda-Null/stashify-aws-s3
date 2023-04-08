@@ -5,6 +5,9 @@ require "stashify/file"
 module Stashify
   class File
     module AWS
+      # An implementation for interacting with files in AWS S3
+      # buckets. The constructor needs an instance of Aws::S3::Bucket
+      # order to know which bucket to interact with.
       class S3 < Stashify::File
         def initialize(bucket:, path:)
           @bucket = bucket

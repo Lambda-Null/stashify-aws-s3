@@ -6,6 +6,10 @@ require "stashify/file/aws/s3"
 module Stashify
   class Directory
     module AWS
+      # An implementation for interacting with AWS S3 buckets as if
+      # they had directories with "/" as a path separator. In
+      # addition to a path, it also needs a Aws::S3::Bucket object
+      # representing the bucket the file resides within.
       class S3 < Stashify::Directory
         attr_reader :bucket, :path
 

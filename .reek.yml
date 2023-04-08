@@ -1,7 +1,4 @@
 detectors:
-  IrresponsibleModule:
-    enabled: false
-
   UncommunicativeModuleName:
     accept:
       - Stashify::AWS::S3
